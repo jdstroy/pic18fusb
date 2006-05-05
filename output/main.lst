@@ -1,0 +1,129 @@
+MP2COD 4.00, COFF to COD File Converter
+Copyright (c) 2005 Microchip Technology Inc.
+Listing File Generated: Mon Jan 16 19:35:01 2006
+
+
+Address  Value    Disassembly              Source                                                                           File
+-------  -------  -----------------------  -------------------------------------------------------------------------------  -----
+                                           /* start.c                                                                       C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                            Copyright 2006 Andrew Holbrook                                                  C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                              Licensed under the Apache License, Version 2.0 (the "License");               C:\picnew\src\start.c
+                                              you may not use this file except in compliance with the License.              C:\picnew\src\start.c
+                                              You may obtain a copy of the License at                                       C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                                  http://www.apache.org/licenses/LICENSE-2.0                                C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                              Unless required by applicable law or agreed to in writing, software           C:\picnew\src\start.c
+                                              distributed under the License is distributed on an "AS IS" BASIS,             C:\picnew\src\start.c
+                                              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.      C:\picnew\src\start.c
+                                              See the License for the specific language governing permissions and           C:\picnew\src\start.c
+                                              limitations under the License.                                                C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                           */                                                                               C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                           /* Header files */                                                               C:\picnew\src\start.c
+                                           #include <p18f4550.h> //Header provided by Microchip.                            C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                           /* Local prototypes */                                                           C:\picnew\src\start.c
+                                           void _entry(void);                                                               C:\picnew\src\start.c
+                                           void _high_isr(void);                                                            C:\picnew\src\start.c
+                                           void _low_isr(void);                                                             C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                           /* External prototypes */                                                        C:\picnew\src\start.c
+                                           extern void main(void);                                                          C:\picnew\src\start.c
+                                           extern void high_isr_handler(void);                                              C:\picnew\src\start.c
+                                           extern void low_isr_handler(void);                                               C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                           #pragma code _entry = 0x0 //Defines the following code section at address 0x0(reset interrupt vector). C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                           //Entry point for program on startup/reset.                                      C:\picnew\src\start.c
+                                           void _entry(void){                                                               C:\picnew\src\start.c
+000004   d7fd     BRA       0x0            	while(1){ //Loop on main/user code.                                             C:\picnew\src\start.c
+000000   ec11     CALL      0x622,0x0      		main();                                                                        C:\picnew\src\start.c
+000002   f003                                                                                                               
+                                           	}                                                                               C:\picnew\src\start.c
+                                           }                                                                                C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                           #pragma code _high_isr = 0x08 //Defines the following code section at address 0x08(high priority interrupt vector). C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                           //Entry point on a high priority interrupt.                                      C:\picnew\src\start.c
+                                           void _high_isr(void){                                                            C:\picnew\src\start.c
+000008   6af2     CLRF      0xf2,0x0       	INTCON = 0; //Disable interrupts.                                               C:\picnew\src\start.c
+00000a   ec8b     CALL      0x516,0x0      	high_isr_handler(); //Call high_isr_handler to handle interrupt.                C:\picnew\src\start.c
+00000c   f002                                                                                                               
+00000e   0010     RETFIE    0x0            	_asm RETFIE 0 _endasm //Return from _high_isr and re-enable interrupts.         C:\picnew\src\start.c
+000010   0012     RETURN    0x0            }                                                                                C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                           #pragma code _low_isr = 0x18 //Defines the following code section at address 0x18(low priority interrupt vector). C:\picnew\src\start.c
+                                                                                                                            C:\picnew\src\start.c
+                                           //Entry point on a low priority interrupt.                                       C:\picnew\src\start.c
+                                           void _low_isr(void){                                                             C:\picnew\src\start.c
+000018   6af2     CLRF      0xf2,0x0       	INTCON = 0; //Disable interrupts.                                               C:\picnew\src\start.c
+00001a   ec10     CALL      0x620,0x0      	low_isr_handler(); //Call low_isr_handler to handle interrupt.                  C:\picnew\src\start.c
+00001c   f003                                                                                                               
+00001e   0010     RETFIE    0x0            	_asm RETFIE 0 _endasm //Return from _low_isr and re-enable interrupts.          C:\picnew\src\start.c
+000020   0012     RETURN    0x0            }                                                                                C:\picnew\src\start.c
+                                           /* main.c                                                                        C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                            Copyright 2006 Andrew Holbrook                                                  C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                              Licensed under the Apache License, Version 2.0 (the "License");               C:\picnew\src\main.c
+                                              you may not use this file except in compliance with the License.              C:\picnew\src\main.c
+                                              You may obtain a copy of the License at                                       C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                                  http://www.apache.org/licenses/LICENSE-2.0                                C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                              Unless required by applicable law or agreed to in writing, software           C:\picnew\src\main.c
+                                              distributed under the License is distributed on an "AS IS" BASIS,             C:\picnew\src\main.c
+                                              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.      C:\picnew\src\main.c
+                                              See the License for the specific language governing permissions and           C:\picnew\src\main.c
+                                              limitations under the License.                                                C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                           */                                                                               C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                           /* Header files */                                                               C:\picnew\src\main.c
+                                           #include <p18f4550.h> //Header provided by Microchip.                            C:\picnew\src\main.c
+                                           #include "h/typedefs.h" //Defines types and defined constants.                   C:\picnew\src\main.c
+                                           #include "h/usb.h" //Defines data collection types(structs/unions).              C:\picnew\src\main.c
+                                           #include "h/system.h" //Functions related to system.                             C:\picnew\src\main.c
+                                           #include "h/interrupts.h" //Functions for handling interrupts.                   C:\picnew\src\main.c
+                                           #include "h/descriptors.h" //USB standard device descriptors.                    C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                           #pragma udata usbram4 = 0x400 //Defines the following section at ram location 0x400(USB ram). C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                           //Endpoint 0(default - control endpoint) control registers.                      C:\picnew\src\main.c
+                                           volatile far BDT ep0Bo; //out.                                                   C:\picnew\src\main.c
+                                           volatile far BDT ep0Bi; //in.                                                    C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                           //Endpoint 1(used as bulk in and out for mass storage class).                    C:\picnew\src\main.c
+                                           volatile far BDT ep1Bo; //out.                                                   C:\picnew\src\main.c
+                                           volatile far BDT ep1Bi; //in.                                                    C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                           volatile far CTRL_TRF_SETUP SetupPkt; //Buffer for control transfer setup packet. C:\picnew\src\main.c
+                                           volatile far CTRL_TRF_DATA TrfData; //Buffer for data being sent to host.        C:\picnew\src\main.c
+                                           volatile far USB_BUFFER msd_buffer; //Buffer for data in/out during bulk transfers. C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                           /* uninitialized variables */                                                    C:\picnew\src\main.c
+                                           #pragma udata //Define as uninizialized data section.                            C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                           byte usb_state; //Holds current USB state.                                       C:\picnew\src\main.c
+                                           PARITY parity; //Parity information for transfers.                               C:\picnew\src\main.c
+                                           TRANSFER_STATUS status; //Holds conditional information during transfers.        C:\picnew\src\main.c
+                                           rom byte *gr_pSrc; //Global pointer for rom data.                                C:\picnew\src\main.c
+                                           byte *g_pSrc; //Global pointer for data.                                         C:\picnew\src\main.c
+                                           word bytes_to_send; //Holds bytes to send during transfer.                       C:\picnew\src\main.c
+                                           dword datares; //Data resolution (data expected - data sent).                    C:\picnew\src\main.c
+                                           word tagL, tagH; //Tag words for CBW and CSW (bulk transfers).                   C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                           #pragma code //Define as code section.                                           C:\picnew\src\main.c
+                                                                                                                            C:\picnew\src\main.c
+                                           void main(void){                                                                 C:\picnew\src\main.c
+000622   dd04     RCALL     0x2c           	init(); //Run initialize routine (see system.h).                                C:\picnew\src\main.c
+000624   dd0d     RCALL     0x40           	check_usb_bus(); //Check usb bus for connectivity (see system.h).               C:\picnew\src\main.c
+000626   d7ff     BRA       0x626          	while(1); //Wait for interrupts.                                                C:\picnew\src\main.c
+                                           }                                                                                C:\picnew\src\main.c
+                                                   LIST P=18F4550                                                           C:\MCC18\SRC\TRADIT~1\PROC\p18f4550.asm
+                                                   LIST                                                                     C:\MCC18\SRC\TRADIT~1\PROC\p18f4550.asm
+                                                   END                                                                      C:\MCC18\SRC\TRADIT~1\PROC\p18f4550.asm
