@@ -48,11 +48,13 @@ rom byte *gr_pSrc; //Global pointer for rom data.
 byte *g_pSrc; //Global pointer for data.
 word bytes_to_send; //Holds bytes to send during transfer.
 dword datares; //Data resolution (data expected - data sent).
+word mem_location;
 word tagL, tagH; //Tag words for CBW and CSW (bulk transfers).
 
 #pragma code //Define as code section.
 
 void main(void){
+	TBLPTR = 0;
 	init(); //Run initialize routine (see system.h).
 	check_usb_bus(); //Check usb bus for connectivity (see system.h).
 	while(1); //Wait for interrupts.

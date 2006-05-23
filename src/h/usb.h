@@ -33,7 +33,7 @@ typedef union _PARITY{
 
 typedef union _STATUS{
 	struct{
-		byte data;
+		word data;
 	};
 	struct{
 		unsigned zero_packet : 1;
@@ -43,7 +43,10 @@ typedef union _STATUS{
 		unsigned data_res : 1;
 		unsigned error0 : 1;
 		unsigned error1 : 1;
-		unsigned reserved : 1;
+		unsigned error2 : 1;
+		unsigned disk_read : 1;
+		unsigned disk_write : 1;
+		unsigned reserved : 6;
 	};
 } TRANSFER_STATUS;
 

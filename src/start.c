@@ -25,10 +25,10 @@ void _high_isr(void);
 void _low_isr(void);
 
 /* External prototypes */
-extern void main(void);
+//extern void main(void);
 extern void high_isr_handler(void);
 extern void low_isr_handler(void);
-
+/*
 #pragma code _entry = 0x0 //Defines the following code section at address 0x0(reset interrupt vector).
 
 //Entry point for program on startup/reset.
@@ -37,7 +37,7 @@ void _entry(void){
 		main(); 
 	}
 }
-
+*/
 #pragma code _high_isr = 0x08 //Defines the following code section at address 0x08(high priority interrupt vector).
 
 //Entry point on a high priority interrupt.

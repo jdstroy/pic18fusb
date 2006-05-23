@@ -41,7 +41,7 @@ void high_isr_handler(void){
 	if(UIRbits.URSTIF && UIEbits.URSTIE){ //Reset
 		usb_state = DEFAULT; //Set USB device to DEFAULT state
 		UIR = 0; //Mask all USB interrupt flags
-		UIE = 0x09; //Enable USB TRNIE and URSTIE (transfer and reset)
+		UIE = 0x29; //Enable USB TRNIE and URSTIE (transfer and reset)
 		UEIR = 0;
 		UEIE = 0x0; //Disable all USB error interrupts
 		
@@ -102,7 +102,7 @@ void high_isr_handler(void){
 		}else if(USTAT == 0x08){ //check if packet was received on endpoint 1
 			check_msd_request(); //check request (see msd.h)
 		}else if(USTAT == 0x0C){ //check if packet was sent on endpoint 1
-			if(bytes_to_send){ //check if data is left to send
+			if(bytes_to_send && !status.disk_read){ //check if data is left to send
 				msd_transfer(); //send data
 			}else if(status.send_csw){ //check if send csw status bit was set
 				status.send_csw = 0; //clear
@@ -111,6 +111,9 @@ void high_isr_handler(void){
 				status.data_res = 0; //clear
 				ep1Bi.STAT = 0x80 | 0x04; //stall endpoint 1
 				ep1Bo.STAT = 0x80 | 0x04;
+			}else if(status.disk_read){
+				read();
+			}else if(status.disk_write){
 			}else{
 				ep1Bo.CNT = 31; //setup to receive a new packet on endpoint 1
 				ep1Bo.ADR = (byte *)&msd_buffer;
@@ -127,7 +130,15 @@ void high_isr_handler(void){
 		UIRbits.TRNIF = 0; //clear transfer interrupt
 	}
 	
-	if(!UIRbits.TRNIF && !UIRbits.URSTIF){ //if both interrupts are clear, clear USBIF interrupt flag (not sure if this is necessary)
+	if(UIRbits.STALLIF && UIEbits.STALLIE){
+			ep0Bo.CNT = 16;
+			ep0Bo.ADR = (byte *)&SetupPkt;
+			ep0Bo.STAT = 0x80 | 0x08;
+			UEP0bits.EPSTALL = 0;
+			UIRbits.STALLIF = 0;
+	}
+	
+	if(!UIRbits.TRNIF && !UIRbits.URSTIF && !UIRbits.STALLIF){ //if both interrupts are clear, clear USBIF interrupt flag (not sure if this is necessary)
 		PIR2bits.USBIF = 0;
 	}
 }

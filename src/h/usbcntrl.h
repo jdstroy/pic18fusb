@@ -70,6 +70,7 @@ void check_std_request(void){
 //Clear feature
 void clear_feature(void){
 	parity.msdi_parity = 0; //reset ep1 in parity
+	UEP1bits.EPSTALL = 0;
 	ep0Bi.CNT = 0; //send zero length packet
 	ep0Bi.STAT = 0x80 | 0x40 | 0x08;
 	

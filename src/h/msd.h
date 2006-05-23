@@ -32,6 +32,7 @@ void request_sense_handler(void);
 void read(void);
 void mode_sense(void);
 void test_unit_ready(void);
+void prev_allow_med(void);
 void verify(void);
 void write(void);
 
@@ -41,6 +42,7 @@ extern dword datares;
 extern rom byte *gr_pSrc;
 extern byte *g_pSrc;
 extern word tagL, tagH;
+extern word mem_location;
 
 void check_msd_request(void){
 	switch(msd_buffer._CB[0]){
@@ -52,7 +54,7 @@ void check_msd_request(void){
 		case WRITE: PORTD = 6; write(); break;
 		case MODE_SENSE: PORTD = 7; mode_sense(); break;
 		case TEST_UNIT_RDY: PORTD = 8; test_unit_ready(); break;
-		case PREV_ALLOW_MED: PORTD = 9; test_unit_ready(); break;
+		case PREV_ALLOW_MED: PORTD = 9; prev_allow_med(); break;
 		case VERIFY: PORTD = 10; verify(); break;
 		default: PORTD = 0x0F; while(1); break;
 	}
@@ -193,6 +195,11 @@ void request_sense_handler(void){
 		rs.sense_key = 0x05;
 		rs.additional_sense_code = 0x20;
 		rs.additional_sense_code_qualifier = 0x00;
+	}else if(status.error2){
+		status.error2 = 0;
+		rs.sense_key = 0x05;
+		rs.additional_sense_code = 0x24;
+		rs.additional_sense_code_qualifier = 0x00;
 	}
 	
 	status.send_csw = 1;
@@ -218,7 +225,53 @@ void request_sense_handler(void){
 }
 
 void read(void){
+	/*
+	byte x, *pDst;
 	
+	if(!status.disk_read){
+		tagL = msd_buffer.tagL;
+		tagH = msd_buffer.tagH;
+		bytes_to_send = ((msd_buffer.dataresH << 16) | msd_buffer.dataresL);
+		datares = bytes_to_send;
+		//mem_location = (((msd_buffer._CB[4] << 8) | msd_buffer._CB[5]) + 0x1000);
+		mem_location = (0x1000 - 32);
+		status.disk_read = 1;
+	}
+	
+	TBLPTR = (mem_location + (datares - (datares - bytes_to_send)));
+	
+	if(bytes_to_send < 64){
+		x = bytes_to_send;
+	}else{
+		x = 64;
+	}
+	
+	bytes_to_send -= x;
+	
+	if(!bytes_to_send){
+		status.disk_read = 0;
+		status.send_csw = 1;
+	}
+	
+	ep1Bi.CNT = x;
+	ep1Bi.ADR = (byte *)&msd_buffer;
+	
+	pDst = (byte *)&msd_buffer;
+	
+	for(;x>0;x--, TBLPTR--, pDst++){
+		_asm TBLRD _endasm
+		*pDst = TABLAT;
+	}
+	
+	if(parity.msdi_parity){
+		parity.msdi_parity = 0;
+		ep1Bi.STAT = 0x80 | 0x40 | 0x08;
+	}else{
+		parity.msdi_parity = 1;
+		ep1Bi.STAT = 0x80 | 0x08;
+	}
+	
+	*/
 	tagL = msd_buffer.tagL;
 	tagH = msd_buffer.tagH;
 		
@@ -226,24 +279,36 @@ void read(void){
 	datares = 0;
 		
 	gr_pSrc = (rom byte *)&mbr;
-		
+	
 	msd_transfer();
+	
 }
 
 void write(void){
-	byte x[64];
+	byte x;
 	
-	ep1Bo.CNT = 64;
-	ep1Bo.ADR = x;
-	if(parity.msdo_parity){
-		parity.msdo_parity = 0;
-		ep1Bo.STAT = 0x80 | 0x40 | 0x08;
-	}else{
-		parity.msdo_parity = 1;
-		ep1Bo.STAT = 0x80 | 0x08;
+	TBLPTR = (((msd_buffer._CB[4] << 8) | msd_buffer._CB[5]) + (0x1000 - 32));
+	EECON1bits.EEPGD = 1;
+	EECON1bits.CFGS = 0;
+	EECON1bits.WREN = 1;
+	EECON1bits.FREE = 1;
+	EECON2 = 0x55;
+	EECON2 = 0x0AA;
+	EECON1bits.WR = 1;
+	
+	for(x=0;x<32;x++, TBLPTR++){
+		TABLAT = 0x65;
+		_asm TBLWT _endasm
 	}
-	UIRbits.TRNIF = 0;
-	while(!UIRbits.TRNIF);
+	
+	
+	TBLPTR = (((msd_buffer._CB[4] << 8) | msd_buffer._CB[5]) + (0x1000 - 32));
+	EECON1bits.EEPGD = 1;
+	EECON1bits.CFGS = 0;
+	EECON1bits.WREN = 1;
+	EECON2 = 0x55;
+	EECON2 = 0x0AA;
+	EECON1bits.WR = 1;
 	
 	PORTD = 0x02;
 	while(1);
@@ -276,6 +341,22 @@ void test_unit_ready(void){
 	
 	bytes_to_send = 0;
 	datares = 0;
+	
+	send_csw();
+}
+
+void prev_allow_med(void){
+	
+	tagL = msd_buffer.tagL;
+	tagH = msd_buffer.tagH;
+	
+	bytes_to_send = 0;
+	datares = 0;
+	
+	if(msd_buffer._CB[4]){
+		status.csw_error = 1;
+		status.error2 = 1;
+	}
 	
 	send_csw();
 }
