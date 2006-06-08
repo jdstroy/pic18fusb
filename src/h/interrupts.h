@@ -100,7 +100,11 @@ void high_isr_handler(void){
 				ep0Bo.STAT = 0x80 | 0x08;
 			}
 		}else if(USTAT == 0x08){ //check if packet was received on endpoint 1
-			check_msd_request(); //check request (see msd.h)
+			if(status.disk_write){
+				write();
+			}else{
+				check_msd_request(); //check request (see msd.h)
+			}
 		}else if(USTAT == 0x0C){ //check if packet was sent on endpoint 1
 			if(bytes_to_send && !status.disk_read){ //check if data is left to send
 				msd_transfer(); //send data

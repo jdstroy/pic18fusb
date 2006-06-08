@@ -46,7 +46,7 @@ rom CAPACITY capacity = {
 
 #pragma romdata disk=0x1000
 
-rom MBR mbr = {
+/*rom MBR mbr = {
 	{0},
 	0x80,
 	0x01,
@@ -60,7 +60,7 @@ rom MBR mbr = {
 	0x40000000,
 	{0},
 	0xAA55
-};
+};*/
 
 #pragma code
 

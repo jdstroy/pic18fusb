@@ -225,20 +225,19 @@ void request_sense_handler(void){
 }
 
 void read(void){
-	/*
-	byte x, *pDst;
+	
+	byte x, y, *pDst;
 	
 	if(!status.disk_read){
 		tagL = msd_buffer.tagL;
 		tagH = msd_buffer.tagH;
 		bytes_to_send = ((msd_buffer.dataresH << 16) | msd_buffer.dataresL);
-		datares = bytes_to_send;
-		//mem_location = (((msd_buffer._CB[4] << 8) | msd_buffer._CB[5]) + 0x1000);
-		mem_location = (0x1000 - 32);
+		datares = ((msd_buffer.dataresH << 16) | msd_buffer.dataresL);
+		mem_location = (((msd_buffer._CB[2]) * 32) + 0x1000);
 		status.disk_read = 1;
 	}
 	
-	TBLPTR = (mem_location + (datares - (datares - bytes_to_send)));
+	TBLPTR = (mem_location + (datares - bytes_to_send));
 	
 	if(bytes_to_send < 64){
 		x = bytes_to_send;
@@ -251,6 +250,7 @@ void read(void){
 	if(!bytes_to_send){
 		status.disk_read = 0;
 		status.send_csw = 1;
+		datares = 0;
 	}
 	
 	ep1Bi.CNT = x;
@@ -258,7 +258,7 @@ void read(void){
 	
 	pDst = (byte *)&msd_buffer;
 	
-	for(;x>0;x--, TBLPTR--, pDst++){
+	for(;x>0;x--, TBLPTR++, pDst++){
 		_asm TBLRD _endasm
 		*pDst = TABLAT;
 	}
@@ -271,38 +271,75 @@ void read(void){
 		ep1Bi.STAT = 0x80 | 0x08;
 	}
 	
-	*/
-	tagL = msd_buffer.tagL;
-	tagH = msd_buffer.tagH;
-		
-	bytes_to_send = ((msd_buffer.dataresH << 16) | msd_buffer.dataresL);
-	datares = 0;
-		
-	gr_pSrc = (rom byte *)&mbr;
-	
-	msd_transfer();
-	
 }
 
 void write(void){
-	byte x;
+	byte x, y, z, *pDst;
+	word TBLPTR_tmp0, TBLPTR_tmp1;
 	
-	TBLPTR = (((msd_buffer._CB[4] << 8) | msd_buffer._CB[5]) + (0x1000 - 32));
-	EECON1bits.EEPGD = 1;
-	EECON1bits.CFGS = 0;
-	EECON1bits.WREN = 1;
-	EECON1bits.FREE = 1;
-	EECON2 = 0x55;
-	EECON2 = 0x0AA;
-	EECON1bits.WR = 1;
+	if(!status.disk_write){ //first call to write function?
+		tagL = msd_buffer.tagL; //setup tags
+		tagH = msd_buffer.tagH;
+		bytes_to_send = ((msd_buffer.dataresH << 16) | msd_buffer.dataresL); //get number of bytes to receive
+		datares = ((msd_buffer.dataresH << 16) | msd_buffer.dataresL); //also number of bytes to receive
+		mem_location = (((msd_buffer._CB[2]) * 32) + 0x1000); //memory location to write to
+		status.disk_write = 1; //set write flag
+		
+		TBLPTR = (mem_location + (datares - bytes_to_send));
+		x = bytes_to_send / 64;
+		for(;x>0;x--, TBLPTR+=64){
+			EECON1bits.EEPGD = 1;
+			EECON1bits.CFGS = 0;
+			EECON1bits.WREN = 1;
+			EECON1bits.FREE = 1;
+			EECON2 = 0x55;
+			EECON2 = 0x0AA;
+			EECON1bits.WR = 1;
+		}
+		
+		if(bytes_to_send < 64){ //check if we will receive less than 64 bytes
+			ep1Bo.CNT = bytes_to_send;
+		}else{
+			ep1Bo.CNT = 64;
+		}
+		
+		//setup to receive data
+		ep1Bo.ADR = (byte *)&msd_buffer;
+		if(parity.msdo_parity){
+			parity.msdo_parity = 0;
+			ep1Bo.STAT = 0x80 | 0x40 | 0x08;
+		}else{
+			parity.msdo_parity = 1;
+			ep1Bo.STAT = 0x80 | 0x08;
+		}
+		
+		return; //leave write function
+	}
 	
-	for(x=0;x<32;x++, TBLPTR++){
-		TABLAT = 0x65;
+	TBLPTR = (mem_location + (datares - bytes_to_send));
+	TBLPTR_tmp0 = TBLPTR;
+	
+	bytes_to_send -= ep1Bo.CNT; //subtract number of bytes just received from total
+	
+	y = 0;
+	if(ep1Bo.CNT < 32){
+		x = ep1Bo.CNT;
+	}else if(ep1Bo.CNT > 32){
+		x = 32;
+		y = (ep1Bo.CNT - 32);
+	}else{
+		x = 32;
+	}
+	
+	for(z=0;x>0;x--, z++, TBLPTR++){
+		TABLAT = msd_buffer._byte[z];
 		_asm TBLWT _endasm
 	}
 	
+	TBLPTR_tmp1 = TBLPTR;
 	
-	TBLPTR = (((msd_buffer._CB[4] << 8) | msd_buffer._CB[5]) + (0x1000 - 32));
+	TBLPTR = TBLPTR_tmp0;
+	
 	EECON1bits.EEPGD = 1;
 	EECON1bits.CFGS = 0;
 	EECON1bits.WREN = 1;
@@ -310,8 +347,44 @@ void write(void){
 	EECON2 = 0x0AA;
 	EECON1bits.WR = 1;
 	
-	PORTD = 0x02;
-	while(1);
+	TBLPTR = TBLPTR_tmp1;
+	
+	if(y){
+		for(;y>0;y--, z++, TBLPTR++){
+			TABLAT = msd_buffer._byte[z];
+			_asm TBLWT _endasm
+		}
+		TBLPTR = TBLPTR_tmp1;
+		EECON1bits.EEPGD = 1;
+		EECON1bits.CFGS = 0;
+		EECON1bits.WREN = 1;
+		EECON2 = 0x55;
+		EECON2 = 0x0AA;
+		EECON1bits.WR = 1;
+	}
+	
+	if(!bytes_to_send){
+		status.disk_write = 0;
+		datares = 0;
+		send_csw();
+		return;
+	}
+	
+	if(bytes_to_send < 64){ //check if we will receive less than 64 bytes
+		ep1Bo.CNT = bytes_to_send;
+	}else{
+		ep1Bo.CNT = 64;
+	}
+	
+	//setup to receive data
+	ep1Bo.ADR = (byte *)&msd_buffer;
+	if(parity.msdo_parity){
+		parity.msdo_parity = 0;
+		ep1Bo.STAT = 0x80 | 0x40 | 0x08;
+	}else{
+		parity.msdo_parity = 1;
+		ep1Bo.STAT = 0x80 | 0x08;
+	}
 }
 
 void mode_sense(void){

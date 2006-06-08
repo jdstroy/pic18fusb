@@ -1,5 +1,7 @@
 LIBPATH c:\mcc18\lib
 
+FILES c018i.o
+FILES clib.lib
 FILES ./output/start.o
 FILES p18f4550.lib
 
