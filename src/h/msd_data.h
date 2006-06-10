@@ -39,7 +39,7 @@ rom INQUIRY_RESPONSE inq_resp = {
 
 rom CAPACITY capacity = {
 	0x0000,
-	0x4000,
+	0x3000,
 	0x0000,
 	0x0002
 };

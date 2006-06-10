@@ -27,7 +27,7 @@ typedef union _PARITY{
 		unsigned con_parity : 1;
 		unsigned msdo_parity : 1;
 		unsigned msdi_parity : 1;
-		unsigned reserved : 6;
+		unsigned reserved : 5;
 	};
 } PARITY;
 

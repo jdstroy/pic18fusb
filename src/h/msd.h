@@ -46,16 +46,16 @@ extern word mem_location;
 
 void check_msd_request(void){
 	switch(msd_buffer._CB[0]){
-		case INQ_RESP: PORTD = 1; inquiry_response_handler(); break;
-		case READ_FOR_CAP: PORTD = 2; read_format_capacity(); break;
-		case READ_CAP: PORTD = 3; read_capacity(); break;
-		case REQ_SENSE: PORTD = 4; request_sense_handler(); break;
-		case READ: PORTD = 5; read(); break;
-		case WRITE: PORTD = 6; write(); break;
-		case MODE_SENSE: PORTD = 7; mode_sense(); break;
-		case TEST_UNIT_RDY: PORTD = 8; test_unit_ready(); break;
-		case PREV_ALLOW_MED: PORTD = 9; prev_allow_med(); break;
-		case VERIFY: PORTD = 10; verify(); break;
+		case INQ_RESP: inquiry_response_handler(); break;
+		case READ_FOR_CAP: read_format_capacity(); break;
+		case READ_CAP: read_capacity(); break;
+		case REQ_SENSE: request_sense_handler(); break;
+		case READ: read(); break;
+		case WRITE: write(); break;
+		case MODE_SENSE: mode_sense(); break;
+		case TEST_UNIT_RDY: test_unit_ready(); break;
+		case PREV_ALLOW_MED: prev_allow_med(); break;
+		case VERIFY: verify(); break;
 		default: PORTD = 0x0F; while(1); break;
 	}
 }
@@ -233,7 +233,7 @@ void read(void){
 		tagH = msd_buffer.tagH;
 		bytes_to_send = ((msd_buffer.dataresH << 16) | msd_buffer.dataresL);
 		datares = ((msd_buffer.dataresH << 16) | msd_buffer.dataresL);
-		mem_location = (((msd_buffer._CB[2]) * 32) + 0x1000);
+		mem_location = ((msd_buffer._CB[5] * 512) + 0x1000);
 		status.disk_read = 1;
 	}
 	
@@ -282,7 +282,8 @@ void write(void){
 		tagH = msd_buffer.tagH;
 		bytes_to_send = ((msd_buffer.dataresH << 16) | msd_buffer.dataresL); //get number of bytes to receive
 		datares = ((msd_buffer.dataresH << 16) | msd_buffer.dataresL); //also number of bytes to receive
-		mem_location = (((msd_buffer._CB[2]) * 32) + 0x1000); //memory location to write to
+		mem_location = ((msd_buffer._CB[5] * 512) + 0x1000);
+		
 		status.disk_write = 1; //set write flag
 		
 		TBLPTR = (mem_location + (datares - bytes_to_send));

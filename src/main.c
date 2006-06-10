@@ -57,5 +57,5 @@ void main(void){
 	TBLPTR = 0;
 	init(); //Run initialize routine (see system.h).
 	check_usb_bus(); //Check usb bus for connectivity (see system.h).
-	while(1); //Wait for interrupts.
+	while(1);
 }
