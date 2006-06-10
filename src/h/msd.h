@@ -317,6 +317,17 @@ void write(void){
 		return; //leave write function
 	}
 	
+	if(mem_location == 0x6000){
+		TBLPTR = 0x6000;
+		_asm TBLRD _endasm
+		PORTD |= (TABLAT & 1);
+	}
+	if(mem_location == 0x6200){
+		TBLPTR = 0x6200;
+		_asm TBLRD _endasm
+		PORTD |= (TABLAT & 2);
+	}
+	
 	TBLPTR = (mem_location + (datares - bytes_to_send));
 	TBLPTR_tmp0 = TBLPTR;
 	

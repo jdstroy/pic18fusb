@@ -1,129 +1,475 @@
 MP2COD 4.00, COFF to COD File Converter
 Copyright (c) 2005 Microchip Technology Inc.
-Listing File Generated: Mon Jan 16 19:35:01 2006
+Listing File Generated: Thu Jan 05 05:40:44 2006
 
 
 Address  Value    Disassembly              Source                                                                           File
 -------  -------  -----------------------  -------------------------------------------------------------------------------  -----
-                                           /* start.c                                                                       C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                            Copyright 2006 Andrew Holbrook                                                  C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                              Licensed under the Apache License, Version 2.0 (the "License");               C:\picnew\src\start.c
-                                              you may not use this file except in compliance with the License.              C:\picnew\src\start.c
-                                              You may obtain a copy of the License at                                       C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                                  http://www.apache.org/licenses/LICENSE-2.0                                C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                              Unless required by applicable law or agreed to in writing, software           C:\picnew\src\start.c
-                                              distributed under the License is distributed on an "AS IS" BASIS,             C:\picnew\src\start.c
-                                              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.      C:\picnew\src\start.c
-                                              See the License for the specific language governing permissions and           C:\picnew\src\start.c
-                                              limitations under the License.                                                C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                           */                                                                               C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                           /* Header files */                                                               C:\picnew\src\start.c
-                                           #include <p18f4550.h> //Header provided by Microchip.                            C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                           /* Local prototypes */                                                           C:\picnew\src\start.c
-                                           void _entry(void);                                                               C:\picnew\src\start.c
-                                           void _high_isr(void);                                                            C:\picnew\src\start.c
-                                           void _low_isr(void);                                                             C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                           /* External prototypes */                                                        C:\picnew\src\start.c
-                                           extern void main(void);                                                          C:\picnew\src\start.c
-                                           extern void high_isr_handler(void);                                              C:\picnew\src\start.c
-                                           extern void low_isr_handler(void);                                               C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                           #pragma code _entry = 0x0 //Defines the following code section at address 0x0(reset interrupt vector). C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                           //Entry point for program on startup/reset.                                      C:\picnew\src\start.c
-                                           void _entry(void){                                                               C:\picnew\src\start.c
-000004   d7fd     BRA       0x0            	while(1){ //Loop on main/user code.                                             C:\picnew\src\start.c
-000000   ec11     CALL      0x622,0x0      		main();                                                                        C:\picnew\src\start.c
-000002   f003                                                                                                               
-                                           	}                                                                               C:\picnew\src\start.c
-                                           }                                                                                C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                           #pragma code _high_isr = 0x08 //Defines the following code section at address 0x08(high priority interrupt vector). C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                           //Entry point on a high priority interrupt.                                      C:\picnew\src\start.c
-                                           void _high_isr(void){                                                            C:\picnew\src\start.c
-000008   6af2     CLRF      0xf2,0x0       	INTCON = 0; //Disable interrupts.                                               C:\picnew\src\start.c
-00000a   ec8b     CALL      0x516,0x0      	high_isr_handler(); //Call high_isr_handler to handle interrupt.                C:\picnew\src\start.c
-00000c   f002                                                                                                               
-00000e   0010     RETFIE    0x0            	_asm RETFIE 0 _endasm //Return from _high_isr and re-enable interrupts.         C:\picnew\src\start.c
-000010   0012     RETURN    0x0            }                                                                                C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                           #pragma code _low_isr = 0x18 //Defines the following code section at address 0x18(low priority interrupt vector). C:\picnew\src\start.c
-                                                                                                                            C:\picnew\src\start.c
-                                           //Entry point on a low priority interrupt.                                       C:\picnew\src\start.c
-                                           void _low_isr(void){                                                             C:\picnew\src\start.c
-000018   6af2     CLRF      0xf2,0x0       	INTCON = 0; //Disable interrupts.                                               C:\picnew\src\start.c
-00001a   ec10     CALL      0x620,0x0      	low_isr_handler(); //Call low_isr_handler to handle interrupt.                  C:\picnew\src\start.c
-00001c   f003                                                                                                               
-00001e   0010     RETFIE    0x0            	_asm RETFIE 0 _endasm //Return from _low_isr and re-enable interrupts.          C:\picnew\src\start.c
-000020   0012     RETURN    0x0            }                                                                                C:\picnew\src\start.c
-                                           /* main.c                                                                        C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                            Copyright 2006 Andrew Holbrook                                                  C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                              Licensed under the Apache License, Version 2.0 (the "License");               C:\picnew\src\main.c
-                                              you may not use this file except in compliance with the License.              C:\picnew\src\main.c
-                                              You may obtain a copy of the License at                                       C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                                  http://www.apache.org/licenses/LICENSE-2.0                                C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                              Unless required by applicable law or agreed to in writing, software           C:\picnew\src\main.c
-                                              distributed under the License is distributed on an "AS IS" BASIS,             C:\picnew\src\main.c
-                                              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.      C:\picnew\src\main.c
-                                              See the License for the specific language governing permissions and           C:\picnew\src\main.c
-                                              limitations under the License.                                                C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                           */                                                                               C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                           /* Header files */                                                               C:\picnew\src\main.c
-                                           #include <p18f4550.h> //Header provided by Microchip.                            C:\picnew\src\main.c
-                                           #include "h/typedefs.h" //Defines types and defined constants.                   C:\picnew\src\main.c
-                                           #include "h/usb.h" //Defines data collection types(structs/unions).              C:\picnew\src\main.c
-                                           #include "h/system.h" //Functions related to system.                             C:\picnew\src\main.c
-                                           #include "h/interrupts.h" //Functions for handling interrupts.                   C:\picnew\src\main.c
-                                           #include "h/descriptors.h" //USB standard device descriptors.                    C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                           #pragma udata usbram4 = 0x400 //Defines the following section at ram location 0x400(USB ram). C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                           //Endpoint 0(default - control endpoint) control registers.                      C:\picnew\src\main.c
-                                           volatile far BDT ep0Bo; //out.                                                   C:\picnew\src\main.c
-                                           volatile far BDT ep0Bi; //in.                                                    C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                           //Endpoint 1(used as bulk in and out for mass storage class).                    C:\picnew\src\main.c
-                                           volatile far BDT ep1Bo; //out.                                                   C:\picnew\src\main.c
-                                           volatile far BDT ep1Bi; //in.                                                    C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                           volatile far CTRL_TRF_SETUP SetupPkt; //Buffer for control transfer setup packet. C:\picnew\src\main.c
-                                           volatile far CTRL_TRF_DATA TrfData; //Buffer for data being sent to host.        C:\picnew\src\main.c
-                                           volatile far USB_BUFFER msd_buffer; //Buffer for data in/out during bulk transfers. C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                           /* uninitialized variables */                                                    C:\picnew\src\main.c
-                                           #pragma udata //Define as uninizialized data section.                            C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                           byte usb_state; //Holds current USB state.                                       C:\picnew\src\main.c
-                                           PARITY parity; //Parity information for transfers.                               C:\picnew\src\main.c
-                                           TRANSFER_STATUS status; //Holds conditional information during transfers.        C:\picnew\src\main.c
-                                           rom byte *gr_pSrc; //Global pointer for rom data.                                C:\picnew\src\main.c
-                                           byte *g_pSrc; //Global pointer for data.                                         C:\picnew\src\main.c
-                                           word bytes_to_send; //Holds bytes to send during transfer.                       C:\picnew\src\main.c
-                                           dword datares; //Data resolution (data expected - data sent).                    C:\picnew\src\main.c
-                                           word tagL, tagH; //Tag words for CBW and CSW (bulk transfers).                   C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                           #pragma code //Define as code section.                                           C:\picnew\src\main.c
-                                                                                                                            C:\picnew\src\main.c
-                                           void main(void){                                                                 C:\picnew\src\main.c
-000622   dd04     RCALL     0x2c           	init(); //Run initialize routine (see system.h).                                C:\picnew\src\main.c
-000624   dd0d     RCALL     0x40           	check_usb_bus(); //Check usb bus for connectivity (see system.h).               C:\picnew\src\main.c
-000626   d7ff     BRA       0x626          	while(1); //Wait for interrupts.                                                C:\picnew\src\main.c
-                                           }                                                                                C:\picnew\src\main.c
+                                           /* $Id$ */                       C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           /* Copyright (c)1999 Microchip Technology */                                     C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           /* MPLAB-C18 startup code, including initialized data */                         C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           /* external reference to the user's main routine */                              C:\MCC18\src\traditional\startup\c018i.c
+                                           extern void main (void);                                                         C:\MCC18\src\traditional\startup\c018i.c
+                                           /* prototype for the startup function */                                         C:\MCC18\src\traditional\startup\c018i.c
+                                           void _entry (void);                                                              C:\MCC18\src\traditional\startup\c018i.c
+                                           void _startup (void);                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           /* prototype for the initialized data setup */                                   C:\MCC18\src\traditional\startup\c018i.c
+                                           void _do_cinit (void);                                                           C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           extern volatile near unsigned long short TBLPTR;                                 C:\MCC18\src\traditional\startup\c018i.c
+                                           extern near unsigned FSR0;                                                       C:\MCC18\src\traditional\startup\c018i.c
+                                           extern near char FPFLAGS;                                                        C:\MCC18\src\traditional\startup\c018i.c
+                                           #define RND 6                                                                    C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           #pragma code _entry_scn=0x000000                                                 C:\MCC18\src\traditional\startup\c018i.c
+                                           void                                                                             C:\MCC18\src\traditional\startup\c018i.c
+                                           _entry (void)                                                                    C:\MCC18\src\traditional\startup\c018i.c
+                                           {                                                                                C:\MCC18\src\traditional\startup\c018i.c
+000000   efbb     GOTO      0xd76          _asm goto _startup _endasm                                                       C:\MCC18\src\traditional\startup\c018i.c
+000002   f006                                                                                                               
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+000004   0012     RETURN    0x0            }                                                                                C:\MCC18\src\traditional\startup\c018i.c
+                                           #pragma code _startup_scn                                                        C:\MCC18\src\traditional\startup\c018i.c
+                                           void                                                                             C:\MCC18\src\traditional\startup\c018i.c
+                                           _startup (void)                                                                  C:\MCC18\src\traditional\startup\c018i.c
+                                           {                                                                                C:\MCC18\src\traditional\startup\c018i.c
+                                             _asm                                                                           C:\MCC18\src\traditional\startup\c018i.c
+                                               // Initialize the stack pointer                                              C:\MCC18\src\traditional\startup\c018i.c
+000d76   ee13     LFSR      0x1,0x300          lfsr 1, _stack                                                               C:\MCC18\src\traditional\startup\c018i.c
+000d78   f000                                                                                                               
+000d7a   ee23     LFSR      0x2,0x300          lfsr 2, _stack                                                               C:\MCC18\src\traditional\startup\c018i.c
+000d7c   f000                                                                                                               
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+000d7e   6af8     CLRF      0xf8,0x0           clrf TBLPTRU, 0 // 1st silicon doesn't do this on POR                        C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+000d80   9c0f     BCF       0xf,0x6,0x0        bcf FPFLAGS,RND,0 // Initialize rounding flag for floating point libs        C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                               _endasm                                                                      C:\MCC18\src\traditional\startup\c018i.c
+000d82   ec27     CALL      0xc4e,0x0          _do_cinit ();                                                                C:\MCC18\src\traditional\startup\c018i.c
+000d84   f006                                                                                                               
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           loop:                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                             // Call the user's main routine                                                C:\MCC18\src\traditional\startup\c018i.c
+000d86   ec9f     CALL      0xb3e,0x0        main ();                                                                       C:\MCC18\src\traditional\startup\c018i.c
+000d88   f005                                                                                                               
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+000d8a   d7fd     BRA       0xd86            goto loop;                                                                     C:\MCC18\src\traditional\startup\c018i.c
+000d8c   0012     RETURN    0x0            }                               /* end _startup() */                             C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           /* MPLAB-C18 initialized data memory support */                                  C:\MCC18\src\traditional\startup\c018i.c
+                                           /* The linker will populate the _cinit table */                                  C:\MCC18\src\traditional\startup\c018i.c
+                                           extern far rom struct                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           {                                                                                C:\MCC18\src\traditional\startup\c018i.c
+                                             unsigned short num_init;                                                       C:\MCC18\src\traditional\startup\c018i.c
+                                             struct _init_entry                                                             C:\MCC18\src\traditional\startup\c018i.c
+                                             {                                                                              C:\MCC18\src\traditional\startup\c018i.c
+                                               unsigned long from;                                                          C:\MCC18\src\traditional\startup\c018i.c
+                                               unsigned long to;                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                               unsigned long size;                                                          C:\MCC18\src\traditional\startup\c018i.c
+                                             }                                                                              C:\MCC18\src\traditional\startup\c018i.c
+                                             entries[];                                                                     C:\MCC18\src\traditional\startup\c018i.c
+                                           }                                                                                C:\MCC18\src\traditional\startup\c018i.c
+                                           _cinit;                                                                          C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           #pragma code _cinit_scn                                                          C:\MCC18\src\traditional\startup\c018i.c
+                                           void                                                                             C:\MCC18\src\traditional\startup\c018i.c
+                                           _do_cinit (void)                                                                 C:\MCC18\src\traditional\startup\c018i.c
+                                           {                                                                                C:\MCC18\src\traditional\startup\c018i.c
+                                             /* we'll make the assumption in the following code that these statics          C:\MCC18\src\traditional\startup\c018i.c
+                                              * will be allocated into the same bank.                                       C:\MCC18\src\traditional\startup\c018i.c
+                                              */                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                             static short long prom;                                                        C:\MCC18\src\traditional\startup\c018i.c
+                                             static unsigned short curr_byte;                                               C:\MCC18\src\traditional\startup\c018i.c
+                                             static unsigned short curr_entry;                                              C:\MCC18\src\traditional\startup\c018i.c
+                                             static short long data_ptr;                                                    C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                             // Initialized data...                                                         C:\MCC18\src\traditional\startup\c018i.c
+000c4e   0e2a     MOVLW     0x2a             TBLPTR = (short long)&_cinit;                                                  C:\MCC18\src\traditional\startup\c018i.c
+000c50   6ef6     MOVWF     0xf6,0x0                                                                                        
+000c52   0e00     MOVLW     0x0                                                                                             
+000c54   6ef7     MOVWF     0xf7,0x0                                                                                        
+000c56   0e00     MOVLW     0x0                                                                                             
+000c58   6ef8     MOVWF     0xf8,0x0                                                                                        
+                                             _asm                                                                           C:\MCC18\src\traditional\startup\c018i.c
+000c5a   0100     MOVLB     0x0                movlb data_ptr                                                               C:\MCC18\src\traditional\startup\c018i.c
+000c5c   0009     TBLRDPOSTINC                 tblrdpostinc                                                                 C:\MCC18\src\traditional\startup\c018i.c
+000c5e   50f5     MOVF      0xf5,0x0,0x0       movf TABLAT, 0, 0                                                            C:\MCC18\src\traditional\startup\c018i.c
+000c60   6f79     MOVWF     0x79,0x1           movwf curr_entry, 1                                                          C:\MCC18\src\traditional\startup\c018i.c
+000c62   0009     TBLRDPOSTINC                 tblrdpostinc                                                                 C:\MCC18\src\traditional\startup\c018i.c
+000c64   50f5     MOVF      0xf5,0x0,0x0       movf TABLAT, 0, 0                                                            C:\MCC18\src\traditional\startup\c018i.c
+000c66   6f7a     MOVWF     0x7a,0x1           movwf curr_entry+1, 1                                                        C:\MCC18\src\traditional\startup\c018i.c
+                                             _endasm                                                                        C:\MCC18\src\traditional\startup\c018i.c
+                                               //while (curr_entry)                                                         C:\MCC18\src\traditional\startup\c018i.c
+                                               //{                                                                          C:\MCC18\src\traditional\startup\c018i.c
+                                               test:                                                                        C:\MCC18\src\traditional\startup\c018i.c
+                                               _asm                                                                         C:\MCC18\src\traditional\startup\c018i.c
+000c68   e103     BNZ       0xc70               bnz 3                                                                       C:\MCC18\src\traditional\startup\c018i.c
+000c6a   6779     TSTFSZ    0x79,0x1           tstfsz curr_entry, 1                                                         C:\MCC18\src\traditional\startup\c018i.c
+000c6c   d001     BRA       0xc70              bra 1                                                                        C:\MCC18\src\traditional\startup\c018i.c
+                                               _endasm                                                                      C:\MCC18\src\traditional\startup\c018i.c
+000c6e   d03d     BRA       0xcea              goto done;                                                                   C:\MCC18\src\traditional\startup\c018i.c
+                                                 /* Count down so we only have to look up the data in _cinit                C:\MCC18\src\traditional\startup\c018i.c
+                                                  * once.                                                                   C:\MCC18\src\traditional\startup\c018i.c
+                                                  *                                                                         C:\MCC18\src\traditional\startup\c018i.c
+                                                  * At this point we know that TBLPTR points to the top of the current      C:\MCC18\src\traditional\startup\c018i.c
+                                                  * entry in _cinit, so we can just start reading the from, to, and         C:\MCC18\src\traditional\startup\c018i.c
+                                                  * size values.                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                                  */                                                                        C:\MCC18\src\traditional\startup\c018i.c
+                                                 _asm                                                                       C:\MCC18\src\traditional\startup\c018i.c
+                                           	/* read the source address */                                                   C:\MCC18\src\traditional\startup\c018i.c
+000c70   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+000c72   50f5     MOVF      0xf5,0x0,0x0   	movf TABLAT, 0, 0                                                               C:\MCC18\src\traditional\startup\c018i.c
+000c74   6f74     MOVWF     0x74,0x1       	movwf prom, 1                                                                   C:\MCC18\src\traditional\startup\c018i.c
+000c76   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+000c78   50f5     MOVF      0xf5,0x0,0x0   	movf TABLAT, 0, 0                                                               C:\MCC18\src\traditional\startup\c018i.c
+000c7a   6f75     MOVWF     0x75,0x1       	movwf prom+1, 1                                                                 C:\MCC18\src\traditional\startup\c018i.c
+000c7c   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+000c7e   50f5     MOVF      0xf5,0x0,0x0   	movf TABLAT, 0, 0                                                               C:\MCC18\src\traditional\startup\c018i.c
+000c80   6f76     MOVWF     0x76,0x1       	movwf prom+2, 1                                                                 C:\MCC18\src\traditional\startup\c018i.c
+                                           	/* skip a byte since it's stored as a 32bit int */                              C:\MCC18\src\traditional\startup\c018i.c
+000c82   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+                                           	/* read the destination address directly into FSR0 */                           C:\MCC18\src\traditional\startup\c018i.c
+000c84   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+000c86   50f5     MOVF      0xf5,0x0,0x0   	movf TABLAT, 0, 0                                                               C:\MCC18\src\traditional\startup\c018i.c
+000c88   6ee9     MOVWF     0xe9,0x0       	movwf FSR0L, 0                                                                  C:\MCC18\src\traditional\startup\c018i.c
+000c8a   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+000c8c   50f5     MOVF      0xf5,0x0,0x0   	movf TABLAT, 0, 0                                                               C:\MCC18\src\traditional\startup\c018i.c
+000c8e   6eea     MOVWF     0xea,0x0       	movwf FSR0H, 0                                                                  C:\MCC18\src\traditional\startup\c018i.c
+                                           	/* skip two bytes since it's stored as a 32bit int */                           C:\MCC18\src\traditional\startup\c018i.c
+000c90   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+000c92   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+                                           	/* read the destination address directly into FSR0 */                           C:\MCC18\src\traditional\startup\c018i.c
+000c94   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+000c96   50f5     MOVF      0xf5,0x0,0x0   	movf TABLAT, 0, 0                                                               C:\MCC18\src\traditional\startup\c018i.c
+000c98   6f77     MOVWF     0x77,0x1       	movwf curr_byte, 1                                                              C:\MCC18\src\traditional\startup\c018i.c
+000c9a   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+000c9c   50f5     MOVF      0xf5,0x0,0x0   	movf TABLAT, 0, 0                                                               C:\MCC18\src\traditional\startup\c018i.c
+000c9e   6f78     MOVWF     0x78,0x1       	movwf curr_byte+1, 1                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           	/* skip two bytes since it's stored as a 32bit int */                           C:\MCC18\src\traditional\startup\c018i.c
+000ca0   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+000ca2   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+                                                 _endasm                                                                    C:\MCC18\src\traditional\startup\c018i.c
+                                                 //prom = data_ptr->from;                                                   C:\MCC18\src\traditional\startup\c018i.c
+                                                 //FSR0 = data_ptr->to;                                                     C:\MCC18\src\traditional\startup\c018i.c
+                                                 //curr_byte = (unsigned short) data_ptr->size;                             C:\MCC18\src\traditional\startup\c018i.c
+                                                 /* the table pointer now points to the next entry. Save it                 C:\MCC18\src\traditional\startup\c018i.c
+                                                  * off since we'll be using the table pointer to do the copying            C:\MCC18\src\traditional\startup\c018i.c
+                                                  * for the entry.                                                          C:\MCC18\src\traditional\startup\c018i.c
+                                                  */                                                                        C:\MCC18\src\traditional\startup\c018i.c
+000ca4   cff6     MOVFF     0xff6,0x7b           data_ptr = TBLPTR;                                                         C:\MCC18\src\traditional\startup\c018i.c
+000ca6   f07b                                                                                                               
+000ca8   cff7     MOVFF     0xff7,0x7c                                                                                      
+000caa   f07c                                                                                                               
+000cac   cff8     MOVFF     0xff8,0x7d                                                                                      
+000cae   f07d                                                                                                               
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                                 /* now assign the source address to the table pointer */                   C:\MCC18\src\traditional\startup\c018i.c
+000cb0   c074     MOVFF     0x74,0xff6           TBLPTR = prom;                                                             C:\MCC18\src\traditional\startup\c018i.c
+000cb2   fff6                                                                                                               
+000cb4   c075     MOVFF     0x75,0xff7                                                                                      
+000cb6   fff7                                                                                                               
+000cb8   c076     MOVFF     0x76,0xff8                                                                                      
+000cba   fff8                                                                                                               
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                                 /* do the copy loop */                                                     C:\MCC18\src\traditional\startup\c018i.c
+                                                 _asm                                                                       C:\MCC18\src\traditional\startup\c018i.c
+                                                   // determine if we have any more bytes to copy                           C:\MCC18\src\traditional\startup\c018i.c
+000cbc   0100     MOVLB     0x0            	movlb curr_byte                                                                 C:\MCC18\src\traditional\startup\c018i.c
+000cbe   5377     MOVF      0x77,0x1,0x1   	movf curr_byte, 1, 1                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           copy_loop:                                                                       C:\MCC18\src\traditional\startup\c018i.c
+000cc0   e102     BNZ       0xcc6          	bnz 2 // copy_one_byte                                                          C:\MCC18\src\traditional\startup\c018i.c
+000cc2   5378     MOVF      0x78,0x1,0x1   	movf curr_byte + 1, 1, 1                                                        C:\MCC18\src\traditional\startup\c018i.c
+000cc4   e007     BZ        0xcd4          	bz 7 // done_copying                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           copy_one_byte:                                                                   C:\MCC18\src\traditional\startup\c018i.c
+000cc6   0009     TBLRDPOSTINC             	tblrdpostinc                                                                    C:\MCC18\src\traditional\startup\c018i.c
+000cc8   50f5     MOVF      0xf5,0x0,0x0   	movf TABLAT, 0, 0                                                               C:\MCC18\src\traditional\startup\c018i.c
+000cca   6eee     MOVWF     0xee,0x0       	movwf POSTINC0, 0                                                               C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           	// decrement byte counter                                                       C:\MCC18\src\traditional\startup\c018i.c
+000ccc   0777     DECF      0x77,0x1,0x1   	decf curr_byte, 1, 1                                                            C:\MCC18\src\traditional\startup\c018i.c
+000cce   e2f8     BC        0xcc0          	bc -8 // copy_loop                                                              C:\MCC18\src\traditional\startup\c018i.c
+000cd0   0778     DECF      0x78,0x1,0x1           decf curr_byte + 1, 1, 1                                                 C:\MCC18\src\traditional\startup\c018i.c
+000cd2   d7f9     BRA       0xcc6          	bra -7 // copy_one_byte                                                         C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           done_copying:                                                                    C:\MCC18\src\traditional\startup\c018i.c
+                                                                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                                 _endasm                                                                    C:\MCC18\src\traditional\startup\c018i.c
+                                                 /* restore the table pointer for the next entry */                         C:\MCC18\src\traditional\startup\c018i.c
+000cd4   c07b     MOVFF     0x7b,0xff6           TBLPTR = data_ptr;                                                         C:\MCC18\src\traditional\startup\c018i.c
+000cd6   fff6                                                                                                               
+000cd8   c07c     MOVFF     0x7c,0xff7                                                                                      
+000cda   fff7                                                                                                               
+000cdc   c07d     MOVFF     0x7d,0xff8                                                                                      
+000cde   fff8                                                                                                               
+                                                 /* next entry... */                                                        C:\MCC18\src\traditional\startup\c018i.c
+000ce0   0100     MOVLB     0x0                  curr_entry--;                                                              C:\MCC18\src\traditional\startup\c018i.c
+000ce2   0779     DECF      0x79,0x1,0x1                                                                                    
+000ce4   0e00     MOVLW     0x0                                                                                             
+000ce6   5b7a     SUBWFB    0x7a,0x1,0x1                                                                                    
+000ce8   d7bf     BRA       0xc68                goto test;                                                                 C:\MCC18\src\traditional\startup\c018i.c
+                                           done:                                                                            C:\MCC18\src\traditional\startup\c018i.c
+                                           ;                                                                                C:\MCC18\src\traditional\startup\c018i.c
+000cea   0012     RETURN    0x0            }                                                                                C:\MCC18\src\traditional\startup\c018i.c
+                                           /* start.c                                                                       C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                            Copyright 2006 Andrew Holbrook                                                  C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                              Licensed under the Apache License, Version 2.0 (the "License");               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                              you may not use this file except in compliance with the License.              C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                              You may obtain a copy of the License at                                       C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                  http://www.apache.org/licenses/LICENSE-2.0                                C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                              Unless required by applicable law or agreed to in writing, software           C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                              distributed under the License is distributed on an "AS IS" BASIS,             C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.      C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                              See the License for the specific language governing permissions and           C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                              limitations under the License.                                                C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           */                                                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           /* Header files */                                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           #include <p18f4550.h> //Header provided by Microchip.                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           /* Local prototypes */                                                           C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           void _entry(void);                                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           void _high_isr(void);                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           void _low_isr(void);                                                             C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           /* External prototypes */                                                        C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           //extern void main(void);                                                        C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           extern void high_isr_handler(void);                                              C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           extern void low_isr_handler(void);                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           /*                                                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           #pragma code _entry = 0x0 //Defines the following code section at address 0x0(reset interrupt vector). C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           //Entry point for program on startup/reset.                                      C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           void _entry(void){                                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           	while(1){ //Loop on main/user code.                                             C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           		main();                                                                        C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           	}                                                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           }                                                                                C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           */                                                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           #pragma code _high_isr = 0x08 //Defines the following code section at address 0x08(high priority interrupt vector). C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           //Entry point on a high priority interrupt.                                      C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           void _high_isr(void){                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+000008   6af2     CLRF      0xf2,0x0       	INTCON = 0; //Disable interrupts.                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+00000a   ecf7     CALL      0x9ee,0x0      	high_isr_handler(); //Call high_isr_handler to handle interrupt.                C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+00000c   f004                                                                                                               
+00000e   0010     RETFIE    0x0            	_asm RETFIE 0 _endasm //Return from _high_isr and re-enable interrupts.         C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+000010   0012     RETURN    0x0            }                                                                                C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           #pragma code _low_isr = 0x18 //Defines the following code section at address 0x18(low priority interrupt vector). C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           //Entry point on a low priority interrupt.                                       C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           void _low_isr(void){                                                             C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+000018   6af2     CLRF      0xf2,0x0       	INTCON = 0; //Disable interrupts.                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+00001a   ec9e     CALL      0xb3c,0x0      	low_isr_handler(); //Call low_isr_handler to handle interrupt.                  C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+00001c   f005                                                                                                               
+00001e   0010     RETFIE    0x0            	_asm RETFIE 0 _endasm //Return from _low_isr and re-enable interrupts.          C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+000020   0012     RETURN    0x0            }                                                                                C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\start.c
+                                           /* main.c                                                                        C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                            Copyright 2006 Andrew Holbrook                                                  C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                              Licensed under the Apache License, Version 2.0 (the "License");               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                              you may not use this file except in compliance with the License.              C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                              You may obtain a copy of the License at                                       C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                  http://www.apache.org/licenses/LICENSE-2.0                                C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                              Unless required by applicable law or agreed to in writing, software           C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                              distributed under the License is distributed on an "AS IS" BASIS,             C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                              WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.      C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                              See the License for the specific language governing permissions and           C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                              limitations under the License.                                                C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           */                                                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           /* Header files */                                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           #include <p18f4550.h> //Header provided by Microchip.                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           #include "h/typedefs.h" //Defines types and defined constants.                   C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           #include "h/usb.h" //Defines data collection types(structs/unions).              C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           #include "h/system.h" //Functions related to system.                             C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           #include "h/interrupts.h" //Functions for handling interrupts.                   C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           #include "h/descriptors.h" //USB standard device descriptors.                    C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           #pragma udata usbram4 = 0x400 //Defines the following section at ram location 0x400(USB ram). C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           //Endpoint 0(default - control endpoint) control registers.                      C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           volatile far BDT ep0Bo; //out.                                                   C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           volatile far BDT ep0Bi; //in.                                                    C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           //Endpoint 1(used as bulk in and out for mass storage class).                    C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           volatile far BDT ep1Bo; //out.                                                   C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           volatile far BDT ep1Bi; //in.                                                    C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           volatile far CTRL_TRF_SETUP SetupPkt; //Buffer for control transfer setup packet. C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           volatile far CTRL_TRF_DATA TrfData; //Buffer for data being sent to host.        C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           volatile far USB_BUFFER msd_buffer; //Buffer for data in/out during bulk transfers. C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           /* uninitialized variables */                                                    C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           #pragma udata //Define as uninizialized data section.                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           byte usb_state; //Holds current USB state.                                       C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           PARITY parity; //Parity information for transfers.                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           TRANSFER_STATUS status; //Holds conditional information during transfers.        C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           rom byte *gr_pSrc; //Global pointer for rom data.                                C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           byte *g_pSrc; //Global pointer for data.                                         C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           word bytes_to_send; //Holds bytes to send during transfer.                       C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           dword datares; //Data resolution (data expected - data sent).                    C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           word mem_location;                                                               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           word tagL, tagH; //Tag words for CBW and CSW (bulk transfers).                   C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           #pragma code //Define as code section.                                           C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                                                                                                            C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           void main(void){                                                                 C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+000b3e   6af6     CLRF      0xf6,0x0       	TBLPTR = 0;                                                                     C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+000b40   6af7     CLRF      0xf7,0x0                                                                                        
+000b42   6af8     CLRF      0xf8,0x0                                                                                        
+000b44   ec16     CALL      0x2c,0x0       	init(); //Run initialize routine (see system.h).                                C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+000b46   f000                                                                                                               
+000b48   ec20     CALL      0x40,0x0       	check_usb_bus(); //Check usb bus for connectivity (see system.h).               C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+000b4a   f000                                                                                                               
+000b4c   d7ff     BRA       0xb4c          	while(1);                                                                       C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           }                                                                                C:\Documents and Settings\Andrew\Desktop\pic18fusb\src\main.c
+                                           ;	RCS Header $Id$              C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           ;       CMATH18 DATA DEFINITION FILE                                            C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           ;******************************************************************************* C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           ;   VARIABLE ALLOCATION - Core math library routines                            C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           ;******************************************************************************* C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           MATH_DATA      UDATA_ACS                                                        C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           REMB3                                                                           C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           AARGB7		RES 1                                                                   C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           REMB2                                                                           C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           AARGB6		RES 1                                                                   C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           REMB1                                                                           C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           AARGB5		RES 1                                                                   C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           REMB0                                                                           C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           AARGB4		RES 1                                                                   C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           AARGB3		RES 1                                                                   C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           AARGB2		RES 1                                                                   C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           AARGB1		RES 1                                                                   C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           AARGB0		RES 1                                                                   C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           AEXP		RES 1       ; 8 bit biased exponent for argument A                        C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           	GLOBAL	AARGB0, AARGB1, AARGB2, AARGB3                                          C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                                   GLOBAL  AARGB4, AARGB5, AARGB6, AARGB7                                  C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           	GLOBAL  AEXP                                                                   C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                           	GLOBAL  REMB3, REMB2, REMB1, REMB0                                             C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
+                                                   END                                                                     C:\MCC18\SRC\TRADIT~1\MATH\aarg.asm
                                                    LIST P=18F4550                                                           C:\MCC18\SRC\TRADIT~1\PROC\p18f4550.asm
                                                    LIST                                                                     C:\MCC18\SRC\TRADIT~1\PROC\p18f4550.asm
                                                    END                                                                      C:\MCC18\SRC\TRADIT~1\PROC\p18f4550.asm
+                                           ;	RCS Header $Id$              C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                           ;       CMATH18 DATA DEFINITION FILE                                            C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                           ;******************************************************************************* C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                           ;   VARIABLE ALLOCATION - Core math library routines                            C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                           ;******************************************************************************* C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                           MATH_DATA      UDATA_ACS                                                        C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                           BARGB3		RES 1                                                                   C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                           BARGB2		RES 1                                                                   C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                           BARGB1		RES 1                                                                   C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                           BARGB0		RES 1       ; most significant byte of argument B                       C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                           BEXP		RES 1       ; 8 bit biased exponent for argument B                        C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                                   GLOBAL  BARGB3, BARGB2, BARGB1, BARGB0                                  C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                                   GLOBAL  BEXP                                                            C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                                   END                                                                     C:\MCC18\SRC\TRADIT~1\MATH\barg.asm
+                                           ;	RCS Header $Id$           C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                           ;       CMATH18 DATA DEFINITION FILE                                            C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                           ;******************************************************************************* C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                           ;   VARIABLE ALLOCATION - Core math library routines                            C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                           ;******************************************************************************* C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                           MATH_DATA      UDATA_ACS                                                        C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                           SIGN		RES 1       ; save location for sign in MSB                               C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                           FPFLAGSbits                                                                     C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                           FPFLAGS		RES 1       ; floating point library exception flags                   C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                                                                                                           C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                                   GLOBAL  SIGN, FPFLAGS, FPFLAGSbits                                      C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                           	                                                                               C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                                   END                                                                     C:\MCC18\SRC\TRADIT~1\MATH\cmath18.asm
+                                           /*** Unsigned Integer Division: 16-bit by 16-bit                                 C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                            ***                                                                             C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                            *** Optimized: Dec. 21, 2000                                                    C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                            ***        by: Daniel R. Madill, Quanser Consulting Inc.                        C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                            ***       for: Saved (for the worst case) at least 5*16 = 80 instruction cycles C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                            ***            over the code supplied with MCC18 v1.00.12                       C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                            ***/                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                           void FXD1616U (/*unsigned arg0, unsigned arg1*/)                                 C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                           {                                                                                C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                             // use INDF1 for the counter...                                                C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                 _asm                                                                       C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                               // REM = 0                                                                   C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d4a   6a03     CLRF      0x3,0x0            clrf REMB0, 0                                                                C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d4c   6a02     CLRF      0x2,0x0            clrf REMB1, 0                                                                C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                               // INDF1 = 16                                                                C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d4e   0e10     MOVLW     0x10               movlw 16                                                                     C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d50   6ee7     MOVWF     0xe7,0x0           movwf INDF1, 0                                                               C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                               // Clear the carry                                                           C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d52   90d8     BCF       0xd8,0x0,0x0   	bcf STATUS, 0, 0                                                                C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                           loop:                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                           	//AARG16 <<= 1; Carry is always clear at this point.                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d54   3606     RLCF      0x6,0x1,0x0    	rlcf AARGB1, 1, 0                                                               C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d56   3607     RLCF      0x7,0x1,0x0    	rlcf AARGB0, 1, 0                                                               C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                           	//PROD = (PROD << 1) | (AARG16 >> 16)                                           C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d58   3602     RLCF      0x2,0x1,0x0    	rlcf REMB1, 1, 0                                                                C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d5a   3603     RLCF      0x3,0x1,0x0    	rlcf REMB0, 1, 0                                                                C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                           	                                                                                C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                           	//if (PROD >= BARG16)                                                           C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d5c   500b     MOVF      0xb,0x0,0x0    	movf BARGB1, 0, 0                                                               C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d5e   5c02     SUBWF     0x2,0x0,0x0    	subwf REMB1, 0, 0                                                               C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d60   500c     MOVF      0xc,0x0,0x0    	movf BARGB0, 0, 0                                                               C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d62   5803     SUBWFB    0x3,0x0,0x0    	subwfb REMB0, 0, 0                                                              C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d64   e305     BNC       0xd70          	bnc endloop                                                                     C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                               //{                                                                          C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                           	    //PROD -= BARG16;                                                           C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d66   500b     MOVF      0xb,0x0,0x0    	    movf BARGB1, 0, 0                                                           C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d68   5e02     SUBWF     0x2,0x1,0x0    	    subwf REMB1, 1, 0                                                           C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d6a   500c     MOVF      0xc,0x0,0x0    	    movf BARGB0, 0, 0                                                           C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d6c   5a03     SUBWFB    0x3,0x1,0x0    	    subwfb REMB0, 1, 0                                                          C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                           	    //++AARG16; Since AARG16 was shift to the left above, the increment will    C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                   //          simply set the LSbit. Using incf also clears the carry, which C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                   //          means we don't have to clear the carry at the top of the loop. C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d6e   2a06     INCF      0x6,0x1,0x0            incf AARGB1, 1, 0                                                        C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                               //}                                                                          C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                           endloop:                                                                         C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d70   2ee7     DECFSZ    0xe7,0x1,0x0       decfsz INDF1, 1, 0    // does not affect the carry bit                       C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d72   d7f0     BRA       0xd54              bra loop                                                                     C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                             _endasm                                                                        C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                                                                                                            C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+                                             /* result in AARG already... */                                                C:\MCC18\src\TRADIT~1\math\fxd1616u.c
+000d74   0012     RETURN    0x0            }                                                                                C:\MCC18\src\TRADIT~1\math\fxd1616u.c
